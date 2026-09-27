@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>レシピ管理アプリ（プロトタイプ）</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>レシピ管理アプリ</h1>
+  </header>
+
+  <div id="global-error" class="global-error" hidden></div>
+
+  <main id="app">
+
+    <!-- S1: レシピ一覧画面 -->
+    <section id="screen-list" class="screen">
+      <div class="toolbar">
+        <div class="search-row">
+          <input type="text" id="search-keyword" placeholder="料理名で検索">
+          <button id="btn-search">検索</button>
+        </div>
+        <div class="filter-row">
+          <label for="filter-category">カテゴリ:</label>
+          <select id="filter-category">
+            <option value="">すべて</option>
+            <option value="和食">和食</option>
+            <option value="洋食">洋食</option>
+            <option value="中華">中華</option>
+            <option value="デザート">デザート</option>
+          </select>
+          <button id="btn-new" class="primary">＋新規登録</button>
+        </div>
+      </div>
+      <div id="recipe-list" class="recipe-grid"></div>
+      <p id="empty-message" class="empty-message" hidden>該当するレシピが見つかりません</p>
+    </section>
+
+    <!-- S2: レシピ詳細画面 -->
+    <section id="screen-detail" class="screen" hidden>
+      <button class="link-btn" id="btn-back-to-list-from-detail">← 一覧に戻る</button>
+      <div id="detail-not-found" hidden>
+        <p>レシピが見つかりません</p>
+        <button id="btn-back-to-list-from-notfound">一覧に戻る</button>
+      </div>
+      <div id="detail-content">
+        <div class="detail-header">
+          <h2 id="detail-title"></h2>
+          <div class="detail-actions">
+            <button id="btn-edit">編集</button>
+            <button id="btn-delete" class="danger">削除</button>
+          </div>
+        </div>
+        <div class="detail-meta">
+          <span>カテゴリ: <strong id="detail-category"></strong></span>
+          <span>タグ: <strong id="detail-tags"></strong></span>
+          <span>調理時間: <strong id="detail-time"></strong>分</span>
+          <span>人数: <strong id="detail-servings"></strong>人前</span>
+          <span>カロリー: <strong id="detail-calories"></strong>kcal</span>
+        </div>
+        <div class="detail-block">
+          <h3>■材料</h3>
+          <ul id="detail-ingredients"></ul>
+        </div>
+        <div class="detail-block">
+          <h3>■作り方</h3>
+          <ol id="detail-steps"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- S3: レシピ登録編集フォーム画面 -->
+    <section id="screen-form" class="screen" hidden>
+      <button class="link-btn" id="btn-back-to-list-from-form">← 一覧に戻る</button>
+      <h2 id="form-title">新規登録</h2>
+      <form id="recipe-form" novalidate>
+        <div class="form-row">
+          <label>料理名＊</label>
+          <input type="text" id="f-name">
+          <p class="error-message" id="err-name" hidden></p>
+        </div>
+
+        <div class="form-row">
+          <label>材料＊</label>
+          <div id="ingredients-fields"></div>
+          <button type="button" class="add-btn" id="btn-add-ingredient">＋追加</button>
+          <p class="error-message" id="err-ingredients" hidden></p>
+        </div>
+
+        <div class="form-row">
+          <label>作り方＊</label>
+          <div id="steps-fields"></div>
+          <button type="button" class="add-btn" id="btn-add-step">＋追加</button>
+          <p class="error-message" id="err-steps" hidden></p>
+        </div>
+
+        <div class="form-row">
+          <label>カテゴリ＊</label>
+          <select id="f-category">
+            <option value="">選択してください</option>
+            <option value="和食">和食</option>
+            <option value="洋食">洋食</option>
+            <option value="中華">中華</option>
+            <option value="デザート">デザート</option>
+          </select>
+          <p class="error-message" id="err-category" hidden></p>
+        </div>
+
+        <div class="form-row">
+          <label>タグ</label>
+          <input type="text" id="f-tags" placeholder="カンマ区切りで入力（例: 簡単, 時短）">
+        </div>
+
+        <div class="form-row inline">
+          <label>調理時間</label>
+          <input type="text" id="f-time" class="short">
+          <span>分</span>
+          <p class="error-message" id="err-time" hidden></p>
+        </div>
+
+        <div class="form-row inline">
+          <label>人数</label>
+          <input type="text" id="f-servings" class="short">
+          <span>人前</span>
+          <p class="error-message" id="err-servings" hidden></p>
+        </div>
+
+        <div class="form-row inline">
+          <label>カロリー</label>
+          <input type="text" id="f-calories" class="short">
+          <span>kcal</span>
+          <p class="error-message" id="err-calories" hidden></p>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="btn-cancel">キャンセル</button>
+          <button type="submit" class="primary">保存</button>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
