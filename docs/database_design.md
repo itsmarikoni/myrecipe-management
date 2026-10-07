@@ -78,6 +78,7 @@
 | cooking_time | INT UNSIGNED | NULL | NULL | 調理時間（分） |
 | servings | INT UNSIGNED | NULL | NULL | 人数（人前） |
 | calories | INT UNSIGNED | NULL | NULL | カロリー（kcal） |
+| source_url | VARCHAR(2048) | NULL | NULL | 参照元WebページのURL（任意入力） |
 | created_at | DATETIME | NOT NULL | - | 作成日時 |
 | updated_at | DATETIME | NOT NULL | - | 更新日時 |
 
