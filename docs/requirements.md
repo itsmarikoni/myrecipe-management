@@ -28,6 +28,7 @@
 | [non_functional.md](./non_functional.md) | 非機能要件（パフォーマンス、セキュリティ、可用性、バックアップ、対応ブラウザ） |
 | [screen_design.md](./screen_design.md) | 画面・UI要件（画面一覧、画面遷移図、ワイヤーフレーム、UI要素の振る舞い、エラー表示） |
 | [database_design.md](./database_design.md) | データ設計（ER図、テーブル定義） |
+| [api_design.md](./api_design.md) | API設計（エンドポイント一覧、リクエスト/レスポンス形式） |
 | [tech_stack.md](./tech_stack.md) | 技術選定（フロントエンド・バックエンド・DB・デプロイ先） |
 
 ## 3. スコープ外（今回はやらないこと）
@@ -42,5 +43,5 @@
 ## 4. 今後決めること
 
 - [x] ER図・テーブル設計 → [docs/database_design.md](./database_design.md) を参照
-- [ ] API設計（エンドポイント一覧）
-- [ ] デプロイ先の選定
+- [x] API設計（エンドポイント一覧） → [docs/api_design.md](./api_design.md) を参照
+- [x] デプロイ先の選定 → [docs/tech_stack.md](./tech_stack.md) を参照（Vercel + Render + Aiven for MySQL）
