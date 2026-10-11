@@ -1,14 +1,15 @@
 :root {
-  --color-primary: #d9534f;
-  --color-primary-dark: #c9302c;
-  --color-bg: #f7f5f2;
+  --color-primary: #f2994a;
+  --color-primary-dark: #e07b24;
+  --color-accent: #ffc94d;
+  --color-bg: #fff8ee;
   --color-surface: #ffffff;
-  --color-border: #e0dbd4;
-  --color-text: #3a332c;
-  --color-text-sub: #8a8078;
-  --color-danger: #c0392b;
+  --color-border: #f3dfc1;
+  --color-text: #4a3b2a;
+  --color-text-sub: #9c8a73;
+  --color-danger: #d9534f;
   --color-error-bg: #fdecea;
-  --radius: 8px;
+  --radius: 10px;
 }
 
 * {
@@ -23,7 +24,7 @@ body {
 }
 
 .app-header {
-  background: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   color: #fff;
   padding: 16px 24px;
 }
@@ -92,7 +93,7 @@ button {
 }
 
 button:hover {
-  background: #f0ece7;
+  background: #fdf1dd;
 }
 
 button.primary {
@@ -145,8 +146,9 @@ button.danger:hover {
 }
 
 .recipe-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(242, 153, 74, 0.25);
   transform: translateY(-2px);
+  border-color: var(--color-primary);
 }
 
 .recipe-card h3 {
@@ -197,6 +199,16 @@ button.danger:hover {
   color: var(--color-text-sub);
 }
 
+.detail-source {
+  margin: -4px 0 16px;
+  font-size: 0.85rem;
+  color: var(--color-text-sub);
+}
+
+.detail-source a {
+  color: var(--color-primary-dark);
+}
+
 .detail-block {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -207,6 +219,12 @@ button.danger:hover {
 
 .detail-block h3 {
   margin-top: 0;
+}
+
+.empty-list-item {
+  color: var(--color-text-sub);
+  list-style: none;
+  margin-left: -20px;
 }
 
 #detail-not-found {

@@ -73,7 +73,7 @@
 | カラム名 | 型 | NULL | デフォルト | 説明 |
 |---|---|---|---|---|
 | id | BIGINT UNSIGNED | NOT NULL | AUTO_INCREMENT | PK |
-| category_id | BIGINT UNSIGNED | NOT NULL | - | FK → categories.id |
+| category_id | BIGINT UNSIGNED | NULL | NULL | FK → categories.id（未分類の場合はNULL） |
 | title | VARCHAR(100) | NOT NULL | - | 料理名 |
 | cooking_time | INT UNSIGNED | NULL | NULL | 調理時間（分） |
 | servings | INT UNSIGNED | NULL | NULL | 人数（人前） |
@@ -83,8 +83,8 @@
 | updated_at | DATETIME | NOT NULL | - | 更新日時 |
 
 - インデックス: `INDEX (category_id)`、`INDEX (title)`（キーワード検索用）
-- 外部キー: `category_id REFERENCES categories(id)` ON DELETE RESTRICT
-  - カテゴリ使用中は削除不可とし、誤操作でレシピのカテゴリが失われるのを防ぐ
+- 外部キー: `category_id REFERENCES categories(id)` ON DELETE SET NULL
+  - カテゴリ削除時はレシピを「未分類」扱いとする（参照元URLのみのブックマーク的なレシピを想定し、カテゴリは必須にしない）
 
 ### 3.3 ingredients（材料）
 

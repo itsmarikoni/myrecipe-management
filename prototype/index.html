@@ -56,10 +56,13 @@
         <div class="detail-meta">
           <span>カテゴリ: <strong id="detail-category"></strong></span>
           <span>タグ: <strong id="detail-tags"></strong></span>
-          <span>調理時間: <strong id="detail-time"></strong>分</span>
-          <span>人数: <strong id="detail-servings"></strong>人前</span>
-          <span>カロリー: <strong id="detail-calories"></strong>kcal</span>
+          <span>調理時間: <strong id="detail-time"></strong></span>
+          <span>人数: <strong id="detail-servings"></strong></span>
+          <span>カロリー: <strong id="detail-calories"></strong></span>
         </div>
+        <p id="detail-source-row" class="detail-source" hidden>
+          参照元: <a id="detail-source-url" href="#" target="_blank" rel="noopener noreferrer"></a>
+        </p>
         <div class="detail-block">
           <h3>■材料</h3>
           <ul id="detail-ingredients"></ul>
@@ -132,6 +135,12 @@
           <input type="text" id="f-calories" class="short">
           <span>kcal</span>
           <p class="error-message" id="err-calories" hidden></p>
+        </div>
+
+        <div class="form-row">
+          <label>参照元URL</label>
+          <input type="text" id="f-source-url" placeholder="https://example.com/recipe/123">
+          <p class="error-message" id="err-source-url" hidden></p>
         </div>
 
         <div class="form-actions">
