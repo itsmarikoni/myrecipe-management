@@ -14,6 +14,7 @@ const SAMPLE_RECIPES = [
     calories: 450,
     ingredients: ["じゃがいも 3個", "玉ねぎ 1個", "牛肉 200g", "しょうゆ 大さじ3"],
     steps: ["野菜を切る", "肉と野菜を炒める", "だしと調味料を入れて煮込む"],
+    sourceUrl: "https://cookpad.com/recipe/123456",
   },
   {
     id: 2,
@@ -25,6 +26,7 @@ const SAMPLE_RECIPES = [
     calories: 600,
     ingredients: ["パスタ 100g", "ケチャップ 大さじ4", "ウインナー 2本", "ピーマン 1個"],
     steps: ["パスタを茹でる", "具材を炒める", "ケチャップを絡めて仕上げる"],
+    sourceUrl: "",
   },
   {
     id: 3,
@@ -36,6 +38,7 @@ const SAMPLE_RECIPES = [
     calories: 500,
     ingredients: ["豆腐 1丁", "ひき肉 150g", "豆板醤 小さじ1", "ねぎ 1本"],
     steps: ["ひき肉と豆板醤を炒める", "豆腐を加えて煮る", "水溶き片栗粉でとろみをつける"],
+    sourceUrl: "https://www.kurashiru.com/recipes/example",
   },
   {
     id: 4,
@@ -47,6 +50,7 @@ const SAMPLE_RECIPES = [
     calories: 350,
     ingredients: ["マスカルポーネ 250g", "卵 2個", "コーヒー 適量", "ココアパウダー 適量"],
     steps: ["クリームを作る", "スポンジにコーヒーを染み込ませて重ねる", "冷蔵庫で冷やしココアをふる"],
+    sourceUrl: "https://www.kurashiru.com/recipes/example2",
   },
 ];
 
@@ -132,8 +136,8 @@ function renderList() {
     card.className = "recipe-card";
     card.innerHTML = `
       <h3>${escapeHtml(r.name)}</h3>
-      <p>カテゴリ: ${escapeHtml(r.category)}</p>
-      <p>調理時間: ${r.time}分</p>
+      <p>カテゴリ: ${escapeHtml(r.category || "未分類")}</p>
+      <p>調理時間: ${r.time ? `${r.time}分` : "未登録"}</p>
     `;
     card.addEventListener("click", () => openDetail(r.id));
     listEl.appendChild(card);
@@ -174,17 +178,31 @@ function openDetail(id) {
   contentEl.hidden = false;
 
   document.getElementById("detail-title").textContent = recipe.name;
-  document.getElementById("detail-category").textContent = recipe.category;
+  document.getElementById("detail-category").textContent = recipe.category || "未分類";
   document.getElementById("detail-tags").textContent = recipe.tags.length ? recipe.tags.join(", ") : "なし";
-  document.getElementById("detail-time").textContent = recipe.time;
-  document.getElementById("detail-servings").textContent = recipe.servings;
-  document.getElementById("detail-calories").textContent = recipe.calories;
+  document.getElementById("detail-time").textContent = recipe.time ? `${recipe.time}分` : "未登録";
+  document.getElementById("detail-servings").textContent = recipe.servings ? `${recipe.servings}人前` : "未登録";
+  document.getElementById("detail-calories").textContent = recipe.calories ? `${recipe.calories}kcal` : "未登録";
+
+  const sourceRowEl = document.getElementById("detail-source-row");
+  const sourceUrlEl = document.getElementById("detail-source-url");
+  if (recipe.sourceUrl) {
+    sourceUrlEl.href = recipe.sourceUrl;
+    sourceUrlEl.textContent = recipe.sourceUrl;
+    sourceRowEl.hidden = false;
+  } else {
+    sourceRowEl.hidden = true;
+  }
 
   const ingredientsEl = document.getElementById("detail-ingredients");
-  ingredientsEl.innerHTML = recipe.ingredients.map((i) => `<li>${escapeHtml(i)}</li>`).join("");
+  ingredientsEl.innerHTML = recipe.ingredients.length
+    ? recipe.ingredients.map((i) => `<li>${escapeHtml(i)}</li>`).join("")
+    : `<li class="empty-list-item">材料は未登録です</li>`;
 
   const stepsEl = document.getElementById("detail-steps");
-  stepsEl.innerHTML = recipe.steps.map((s) => `<li>${escapeHtml(s)}</li>`).join("");
+  stepsEl.innerHTML = recipe.steps.length
+    ? recipe.steps.map((s) => `<li>${escapeHtml(s)}</li>`).join("")
+    : `<li class="empty-list-item">作り方は未登録です</li>`;
 
   showScreen("detail");
 }
@@ -234,6 +252,7 @@ function openForm(mode, id = null) {
     document.getElementById("f-time").value = recipe.time;
     document.getElementById("f-servings").value = recipe.servings;
     document.getElementById("f-calories").value = recipe.calories;
+    document.getElementById("f-source-url").value = recipe.sourceUrl || "";
     recipe.ingredients.forEach((v) => addRepeatField(ingredientsFieldsEl, v));
     recipe.steps.forEach((v) => addRepeatField(stepsFieldsEl, v));
   } else {
@@ -320,26 +339,12 @@ document.getElementById("recipe-form").addEventListener("submit", (e) => {
 
   const ingredientsContainer = document.getElementById("ingredients-fields");
   const ingredients = getRepeatFieldValues(ingredientsContainer);
-  if (ingredients.length === 0) {
-    document.getElementById("err-ingredients").hidden = false;
-    document.getElementById("err-ingredients").textContent = "材料は1つ以上入力してください";
-    hasError = true;
-  }
 
   const stepsContainer = document.getElementById("steps-fields");
   const steps = getRepeatFieldValues(stepsContainer);
-  if (steps.length === 0) {
-    document.getElementById("err-steps").hidden = false;
-    document.getElementById("err-steps").textContent = "作り方は1つ以上入力してください";
-    hasError = true;
-  }
 
   const categorySelect = document.getElementById("f-category");
   const category = categorySelect.value;
-  if (!category) {
-    setFieldError(categorySelect, document.getElementById("err-category"), "カテゴリを選択してください");
-    hasError = true;
-  }
 
   const timeInput = document.getElementById("f-time");
   const servingsInput = document.getElementById("f-servings");
@@ -355,6 +360,13 @@ document.getElementById("recipe-form").addEventListener("submit", (e) => {
   }
   if (!validateNumberField(caloriesInput.value.trim())) {
     setFieldError(caloriesInput, document.getElementById("err-calories"), "数値を入力してください");
+    hasError = true;
+  }
+
+  const sourceUrlInput = document.getElementById("f-source-url");
+  const sourceUrl = sourceUrlInput.value.trim();
+  if (sourceUrl !== "" && !/^https?:\/\/.+/.test(sourceUrl)) {
+    setFieldError(sourceUrlInput, document.getElementById("err-source-url"), "http(s)://から始まるURLを入力してください");
     hasError = true;
   }
 
@@ -374,6 +386,7 @@ document.getElementById("recipe-form").addEventListener("submit", (e) => {
     calories: caloriesInput.value.trim() === "" ? 0 : Number(caloriesInput.value.trim()),
     ingredients,
     steps,
+    sourceUrl,
   };
 
   if (currentFormMode === "edit") {
